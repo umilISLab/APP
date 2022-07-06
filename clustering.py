@@ -416,7 +416,7 @@ class PosterioriAffinityPropagation:
     def __init__(self, affinity: object, aging_index: float = 2, damping: float = 0.5, max_iter: int = 200,
                  convergence_iter: int = 15, preference: float = None, freezing: bool = True,
                  columns_to_scale: list = None,
-                 columns_to_encode: list = None):
+                 columns_to_encode: list = None, exemplar_pack=True):
         self.time_tag = 0
         self.data = list()
         self.aging_index = aging_index
@@ -428,6 +428,7 @@ class PosterioriAffinityPropagation:
         self.convergence_iter = convergence_iter
         self.preference = preference
         self.freezing = freezing
+        self.exemplar_pack = exemplar_pack # replace centroids with exemplar at the 0th step
 
         self.columns_to_scale = columns_to_scale
         self.columns_to_encode = columns_to_encode
@@ -457,9 +458,10 @@ class PosterioriAffinityPropagation:
             self.n_iter_ = ap.n_iter_
             self.S = ap.S
 
-            # self._X_pack, self._labels_pack = self._pack(X, ap.labels_)
-            self._X_pack, self._labels_pack = np.array([X[i] for i in ap.cluster_centers_indices_]), np.unique(
-                ap.labels_)
+            if not self.exemplar_pack:
+                self._X_pack, self._labels_pack = self._pack(X, ap.labels_)
+            else:
+                self._X_pack, self._labels_pack = np.array([X[i] for i in ap.cluster_centers_indices_]), np.unique(ap.labels_)
             self.X_, self.labels_ = X, ap.labels_
             self.cluster_centers_indices_ = ap.cluster_centers_indices_
 
