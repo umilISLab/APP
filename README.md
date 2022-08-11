@@ -1,4 +1,4 @@
-# Incremental Affinity Propagation based on Cluster Consolidation and  Evolutionary Stratification
+# Incremental Affinity Propagation based on Cluster Consolidation and  Stratification
 
 To reproduce our results:
 - unzip <i>datasets.zip</i> and <i>samples.zip</i>: ```unzip -q filename.zip```
